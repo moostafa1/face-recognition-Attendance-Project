@@ -45,6 +45,7 @@ def moveImages(path):
 ###############################################################################################################
 
 def movePDFs(path):
+    dest = ''
     try:
         names = os.listdir(path)
         pdfs = [n for n in names if n.endswith("pdf")]
@@ -73,7 +74,7 @@ def movePDFs(path):
 
 if __name__ == "__main__":
     #path = r"faces"
-    X = r"E:\3rd_year\KOLLIA\PROJETS\CV_Project\Attendance_project\Attendance_project"
+    X = r"D:\AAL-NTL\MY_WORK\PROJETS\face recognition Attendance Project"
     #p = r"AtteendancePDF"
     moveImages(X)
-    #movePDFs(X)
+    movePDFs(X)

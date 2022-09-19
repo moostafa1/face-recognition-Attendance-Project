@@ -23,7 +23,7 @@ FONT_BOLD = "Helvetica 10 bold"
 ###############################################################################################################
 icoImg ='face recognition.ico'
 faces = r"faces"
-X = r"E:\3rd_year\KOLLIA\PROJETS\cv"
+X = r"D:\AAL-NTL\MY_WORK\PROJETS\face recognition Attendance Project"
 
 ###############################################################################################################
 ###############################################################################################################
@@ -160,6 +160,7 @@ class Attendance:
     def matching(self):
         #try:
         #while(self.cap.isOpened()):
+        #if not self.cap.isOpened():
         _, self.frame = self.cap.read()
         # Get the latest frame and convert into Image
         self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
@@ -179,7 +180,7 @@ class Attendance:
             print("Smallest Dist: ", faceDist[matchIndex])
             #print(classNames[matchIndex])
 
-            if matches[matchIndex] and faceDist[matchIndex] < 6:
+            if matches[matchIndex] and faceDist[matchIndex] < .5:
                 self.name = self.classNames[matchIndex].title()     # upper()
             else:
                 self.name = "UNKNOWN"
@@ -200,6 +201,10 @@ class Attendance:
             self.label.configure(image=imgtk)
             # Repeat after an interval to capture continiously
             self.label.after(20, self.matching)
+            cv2.destroyAllWindows()
+
+            #if cv2.waitKey(0) & 0xFF==ord("q"):
+            #    break
         #except:
         #    self.showText("Train first....\n")
             #self.cap.release()
@@ -211,7 +216,12 @@ class Attendance:
 ###############################################################################################################
 ###############################################################################################################
 
-#    def closeCamera(self):
+    def closeCamera(self):
+        #self._on_enter_pressed("quit")
+        if self.cap.isOpened():
+            self.cap.release()
+            cv2.destroyAllWindows()
+
 #        if self.cap.isOpened():
 #            self.showText("camera closed....\n")
 #            self.cap.release()
@@ -425,13 +435,15 @@ class Attendance:
     def YES(self):
         accept = self.msg_entry.get()
         accept = 'y'
-        return self.showText(accept)
+        self._insert_message(accept)
+        #return self.showText(accept)
 
 
     def NO(self):
         refuse = self.msg_entry.get()
         refuse = 'n'
-        return self.showText(refuse)
+        self._insert_message(refuse)
+        #return self.showText(refuse)
 
 
 ##############################################################################################################################
@@ -472,7 +484,7 @@ class Attendance:
                     shutil.move(i, dest)
 
         except:
-            self.showText("ERROR: moveImages")
+            self.showText("ERROR: moveImages\n\n")
 
 
     #moveImages(X, os.path.join(X, path))
@@ -497,6 +509,7 @@ class Attendance:
                     shutil.move(p, dest)
                 else:
                     shutil.move(p, dest)
+
 
         except:
             self.showText(f"Please check that your pdf name is different from pdf in the {dest}.")
@@ -551,6 +564,9 @@ class Attendance:
         #try:
         self.showText("\nClear Attendance.csv  (y/n?)\n")
         clear = self.msg_entry.get()
+        #self._insert_message()
+        #clear = input("\nClear Attendance.csv  (y/n?)\n")
+        print(clear)
         if clear == "y":
             with open('Attendance.csv', 'w') as f:
                 #reader = csv.reader(f)
@@ -581,7 +597,6 @@ class Attendance:
                     self.showText(f"{h} removed.....")
                 else:
                     return
-
         except:
             self.showText("\nError: deleteHTML.\n")
 
